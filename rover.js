@@ -19,40 +19,30 @@ class Rover {
     message: messageObject.name,
     results: results1
     };
-    console.log(messageObject.commands);
-    console.log(messageObject.commands.length);
+    // console.log(messageObject.commands);
+    // console.log(messageObject.commands.length);
     for (let i = 0; i < messageObject.commands.length; i++){
      let commandObject =(messageObject.commands[i]);
     //  console.log(commandObject.commandType)
       if (commandObject.commandType === "STATUS_CHECK") {
         let status = {
-        completed: "true",
+        completed: true,
         roverStatus:{mode:this.mode,generatorWatts:this.generatorWatts,position:this.position}
       }
       results1.push(status);
       }else if (commandObject.commandType ==="MODE_CHANGE"){
-        if (this.mode === "NORMAL"){
-        this.mode = "LOW_POWER";
+        this.mode = commandObject.value;
+        console.log(commandObject.value)
         let status = {
-        completed: "true",
-        // roverStatus: {mode: "LOW_POWER", generatorWatts: this.generatorWatts, position: this.position}
+        completed: true,
       }
       results1.push(status);
-      }else if (this.mode === "LOW_POWER"){
-        this.mode = "NORMAL";
-        let status ={
-          comepleted: "true",
-          // roverStatus:{mode: "NORMAL", generatorWatts: this.generatorWatts, position: this.position}
-        }
-          results1.push(status);
-      }
       }else if (commandObject.commandType === "MOVE") {
         // console.log(this.mode);
         if (this.mode === "LOW_POWER"){
           let status = {
-          completed: "False. Cannot move in low power mode."
+          completed: false 
           }
-        // roverStatus:{mode: "NORMAL", generatorWatts: this.generatorWatts, position: this.position}
         results1.push(status);
         }else {
           this.position = messageObject.commands[i].value;
@@ -60,7 +50,6 @@ class Rover {
           // console.log(this.position);
          let status = {
           completed: true,
-        // roverStatus:{mode:this.mode, generatorWatts:this.generatorWatts, position: messageObject.commands[1]}
         }
       results1.push(status);
      }

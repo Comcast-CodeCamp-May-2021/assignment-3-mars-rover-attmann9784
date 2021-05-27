@@ -26,16 +26,22 @@ describe("Rover class", function() {
     let commands = [command2, command1];
     let message = new Message('Two commands',commands);
     let response = rover.receiveMessage(message).results;
-    expect(response).toEqual(rover.receiveMessage(message).results)
+    expect(response.length).toEqual(commands.length);
   });
 // test 10
-  it("response returned by receiveMessage includes two results if two commands are sent in the message", function(){
+  it("responds correctly to status check command", function(){
     let rover = new Rover(98328);
     let command1 = new Command('STATUS_CHECK');
     let command2 = new Command('MOVE', 20);
     let commands = [command2, command1];
-    let message = new Message('Two commands',commands);
+    let message = new Message('status check',[command1]);
     let response = rover.receiveMessage(message).results;
+    expect(response).toEqual([
+  {
+    completed: true,
+    roverStatus: { mode: 'NORMAL', generatorWatts: 110, position: 98328 }
+  }
+])
 
   });
   //test11
@@ -43,9 +49,12 @@ describe("Rover class", function() {
     let rover = new Rover(98328);
     let command1 = new Command('STATUS_CHECK');
     let command2 = new Command('MOVE', 20);
+    let command3 = new Command('MODE_CHANGE', "LOW_POWER");
     let commands = [command2, command1];
-    let message = new Message('Two commands',commands);
+    let message = new Message('Two commands',[command3]);
     let response = rover.receiveMessage(message).results;
+    expect(response).toEqual([ { completed: true } ]);
+    expect(rover.mode).toEqual("LOW_POWER");
 
   });
 //test 12
@@ -53,19 +62,22 @@ describe("Rover class", function() {
     let rover = new Rover(98328);
     let command1 = new Command('STATUS_CHECK');
     let command2 = new Command('MOVE', 20);
-    let commands = [command2, command1];
+    let command3 = new Command('MODE_CHANGE','LOW_POWER');
+    let commands = [command3, command2];
     let message = new Message('Two commands',commands);
     let response = rover.receiveMessage(message).results;
+    expect(response[1]["completed"]).toBe(false)
 
   });
 //test 13
-  it("rresponds with position for move command", function(){
+  it("responds with position for move command", function(){
     let rover = new Rover(98328);
     let command1 = new Command('STATUS_CHECK');
     let command2 = new Command('MOVE', 20);
     let commands = [command2, command1];
-    let message = new Message('Two commands',commands);
+    let message = new Message('Command to move',commands);
     let response = rover.receiveMessage(message).results;
+    expect(response[1]["roverStatus"]["position"]).toEqual(20);
 
   });
 
