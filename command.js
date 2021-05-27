@@ -8,5 +8,5 @@ class Command {
    }
  
  }
- 
+ let commands = []
  module.exports = Command;
