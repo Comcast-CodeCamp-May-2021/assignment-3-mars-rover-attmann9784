@@ -36,12 +36,7 @@ describe("Rover class", function() {
     let commands = [command2, command1];
     let message = new Message('status check',[command1]);
     let response = rover.receiveMessage(message).results;
-    expect(response).toEqual([
-  {
-    completed: true,
-    roverStatus: { mode: 'NORMAL', generatorWatts: 110, position: 98328 }
-  }
-])
+    expect(response).toEqual([{completed: true, roverStatus: { mode: 'NORMAL', generatorWatts: 110, position: 98328 }}])
 
   });
   //test11
@@ -51,7 +46,7 @@ describe("Rover class", function() {
     let command2 = new Command('MOVE', 20);
     let command3 = new Command('MODE_CHANGE', "LOW_POWER");
     let commands = [command2, command1];
-    let message = new Message('Two commands',[command3]);
+    let message = new Message('Mode Change',[command3]);
     let response = rover.receiveMessage(message).results;
     expect(response).toEqual([ { completed: true } ]);
     expect(rover.mode).toEqual("LOW_POWER");
@@ -66,7 +61,8 @@ describe("Rover class", function() {
     let commands = [command3, command2];
     let message = new Message('Two commands',commands);
     let response = rover.receiveMessage(message).results;
-    expect(response[1]["completed"]).toBe(false)
+    expect(response[1]["completed"]).toBe(false);
+    expect(rover.position).toEqual(98328);
 
   });
 //test 13
@@ -78,6 +74,7 @@ describe("Rover class", function() {
     let message = new Message('Command to move',commands);
     let response = rover.receiveMessage(message).results;
     expect(response[1]["roverStatus"]["position"]).toEqual(20);
+    expect(response[1]["completed"]).toEqual(true);
 
   });
 

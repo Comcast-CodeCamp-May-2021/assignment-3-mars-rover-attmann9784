@@ -32,7 +32,7 @@ class Rover {
       results1.push(status);
       }else if (commandObject.commandType ==="MODE_CHANGE"){
         this.mode = commandObject.value;
-        console.log(commandObject.value)
+        // console.log(commandObject.value)
         let status = {
         completed: true,
       }
